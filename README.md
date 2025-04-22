@@ -89,7 +89,7 @@ Now you can demo **HogFlix** entirely in your browser without switching between 
 
 ## Seed Historic Usage Data
 
-To generate valuable insights in your PostHog project, you'll need to add some historic event data. The `seed_demo_data.py` script creates pseudo-random data that mimics real usage of the HogFlix app. You'll need the `500_names_and_emails.csv` in your `scripts` folder (see below on how to generate this), and then run:
+To generate valuable insights in your PostHog project, you'll need to add some historic event data. The `seed_demo_data.py` script creates pseudo-random data that mimics real usage of the HogFlix app. You'll need the `500_names_and_emails.csv` in the root directory of your project (see below on how to generate this), and then run:
 
 ```bash
 python scripts/seed_demo_data.py -k <Project API Key> -p https://<eu or us>.i.posthog.com -d 30 -i 100
