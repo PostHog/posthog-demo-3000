@@ -2,9 +2,11 @@
 
 This repository allows you to spin up a demo app which has been instrumented with PostHog, and seed PostHog historic data and artifacts to provide a full-featured demo environment showcasing all features.
 
+![HogFlix Screenshot](https://raw.githubusercontent.com/PostHog/posthog-demo-3000/4f81b4d2d0819ddaa18ccfc022e2b58c2b168590/static/images/hogflix-screenshot.png)
+
 ## Prerequisites
 
-If you choose to run the demo entirely in your browser using GitHub Code Spaces, skip the requirements and go straight to Option 3, otherwise follow the prerequisites instructions. 
+If you choose to run the demo entirely in your browser using GitHub Code Spaces, skip the requirements and go straight to Option 3, otherwise follow the prerequisites instructions.
 
 To run the demo app on a Mac you'll need to set up Python 3 locally:
 
@@ -17,9 +19,13 @@ After installation, make sure to follow the instructions printed in your termina
 4. Upgrade pip to the latest version: `pip install -U pip`
 5. From the root of this repository, install the requirements: `pip install -r requirements.txt`
 
+## Generate a Personal API Key
+
+In your PostHog dashboard, visit `Settings > Account > Personal API Keys` and create a new API key. This key only needs access to your Hogflix demo project. It'll be used later to seed your PostHog project with user activity.
+
 ## Running the app
 
-There are three ways to run the app: locally using Python, via Docker, or using GitHub Codespaces. 
+There are three ways to run the app: locally using Python, via Docker, or using GitHub Codespaces.
 
 ### Option 1 - Run Locally with Python
 
@@ -78,6 +84,7 @@ To get started:
 This will create a virtual environment in your browser where you can run the app and make changes. It may take a few minutes for the environment to configure, but once done, everything will be set up automatically.
 
 Once the environment is ready, follow these steps:
+
 1. Copy the contents of `.env.example` and create a new `.env` file.
 2. Set the required environment variables, including your **PostHog Project API Key**.
 3. Run the app:
@@ -96,6 +103,7 @@ python scripts/seed_demo_data.py -k <Project API Key> -p https://<eu or us>.i.po
 ```
 
 The input parameters are:
+
 - `-k`: The Project API key for your demo project.
 - `-h`: The PostHog Host.
 - `-d`: The number of previous days to generate data over (optional, defaults to 30).
@@ -119,6 +127,7 @@ python scripts/create_posthog_artifacts.py -p "https://<eu or us>.posthog.com/ap
 ```
 
 The input parameters are:
+
 - `-k`: Your Personal API key.
 - `-p`: The API Endpoint for your PostHog Project.
 
