@@ -118,7 +118,7 @@ This will verify your `.env` is updated, initialize the local DB, seed historica
 
 ## Seed Historic Usage Data
 
-To generate valuable insights in your PostHog project, you'll need to add some historic event data. The `seed_demo_data.py` script creates pseudo-random data that mimics real usage of the HogFlix app. You'll need the `500_names_and_emails.csv` in your `scripts` folder (see below on how to generate this), and then run:
+To generate valuable insights in your PostHog project, you'll need to add some historic event data. The `seed_demo_data.py` script creates pseudo-random data that mimics real usage of the HogFlix app. You'll need the `500_names_and_emails.csv` in the root directory of your project (see below on how to generate this), and then run:
 
 ```bash
 make seed DAYS=30 ITER=100
