@@ -1,7 +1,7 @@
 [project]
-name = "hogflix-demo"
+name = "posthog-demo-3000"
 version = "1.0.0"
-description = "HogFlix Demo 3000 - A PostHog demo application"
+description = "PostHog Demo 3000 - A PostHog demo application"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [

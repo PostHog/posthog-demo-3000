@@ -981,88 +981,6 @@ wheels = [
 ]
 
 [[package]]
-name = "hogflix-demo"
-version = "1.0.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "alembic", version = "1.16.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "alembic", version = "1.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "backoff" },
-    { name = "bcrypt" },
-    { name = "beautifulsoup4" },
-    { name = "bs4" },
-    { name = "email-validator" },
-    { name = "faker", version = "37.12.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "faker", version = "40.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "flask" },
-    { name = "flask-login" },
-    { name = "flask-migrate" },
-    { name = "flask-sqlalchemy" },
-    { name = "flask-wtf" },
-    { name = "gunicorn" },
-    { name = "langchain", version = "0.3.27", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "langchain", version = "1.2.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "langchain-community", version = "0.3.31", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "langchain-community", version = "0.4.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "langchain-openai", version = "0.3.35", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "langchain-openai", version = "1.1.7", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "openai" },
-    { name = "posthog", version = "6.9.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "posthog", version = "7.5.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "pymysql" },
-    { name = "python-dotenv" },
-    { name = "requests" },
-    { name = "slack-bolt" },
-    { name = "slack-sdk" },
-    { name = "sqlalchemy" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "pytest", version = "8.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "pytest", version = "9.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest", version = "8.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "pytest", version = "9.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "alembic", specifier = ">=1.13.2" },
-    { name = "backoff", specifier = ">=2.2.1" },
-    { name = "bcrypt", specifier = ">=4.2.0" },
-    { name = "beautifulsoup4", specifier = ">=4.12.3" },
-    { name = "bs4", specifier = ">=0.0.2" },
-    { name = "email-validator", specifier = ">=2.2.0" },
-    { name = "faker", specifier = ">=27.0.0" },
-    { name = "flask", specifier = ">=3.0.3" },
-    { name = "flask-login", specifier = ">=0.6.3" },
-    { name = "flask-migrate", specifier = ">=4.0.7" },
-    { name = "flask-sqlalchemy", specifier = ">=3.1.1" },
-    { name = "flask-wtf", specifier = ">=1.2.1" },
-    { name = "gunicorn", specifier = ">=21.1.0" },
-    { name = "langchain", specifier = ">=0.2.12" },
-    { name = "langchain-community", specifier = ">=0.2.12" },
-    { name = "langchain-openai", specifier = ">=0.1.22" },
-    { name = "openai", specifier = ">=1.40.0" },
-    { name = "posthog", specifier = ">=3.5.0" },
-    { name = "pymysql", specifier = ">=1.1.1" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.2" },
-    { name = "python-dotenv", specifier = ">=1.0.1" },
-    { name = "requests", specifier = ">=2.31.0" },
-    { name = "slack-bolt", specifier = ">=1.18.1" },
-    { name = "slack-sdk", specifier = ">=3.27.1" },
-    { name = "sqlalchemy", specifier = ">=2.0.32" },
-]
-provides-extras = ["dev"]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8.3.2" }]
-
-[[package]]
 name = "httpcore"
 version = "1.0.9"
 source = { registry = "https://pypi.org/simple" }
@@ -2342,6 +2260,88 @@ sdist = { url = "https://files.pythonhosted.org/packages/98/3b/866af11cb12e9d35f
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1f/03/ba011712ce9d07fe87dcfb72474c388d960e6d0c4f2262d2ae11fd27f0c5/posthog-7.5.1-py3-none-any.whl", hash = "sha256:fd3431ce32c9bbfb1e3775e3633c32ee589c052b0054fafe5ed9e4b17c1969d3", size = 167555, upload-time = "2026-01-08T21:18:37.437Z" },
 ]
+
+[[package]]
+name = "posthog-demo-3000"
+version = "1.0.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "alembic", version = "1.16.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "alembic", version = "1.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "backoff" },
+    { name = "bcrypt" },
+    { name = "beautifulsoup4" },
+    { name = "bs4" },
+    { name = "email-validator" },
+    { name = "faker", version = "37.12.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "faker", version = "40.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "flask" },
+    { name = "flask-login" },
+    { name = "flask-migrate" },
+    { name = "flask-sqlalchemy" },
+    { name = "flask-wtf" },
+    { name = "gunicorn" },
+    { name = "langchain", version = "0.3.27", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "langchain", version = "1.2.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "langchain-community", version = "0.3.31", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "langchain-community", version = "0.4.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "langchain-openai", version = "0.3.35", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "langchain-openai", version = "1.1.7", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "openai" },
+    { name = "posthog", version = "6.9.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "posthog", version = "7.5.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "pymysql" },
+    { name = "python-dotenv" },
+    { name = "requests" },
+    { name = "slack-bolt" },
+    { name = "slack-sdk" },
+    { name = "sqlalchemy" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "pytest", version = "8.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "pytest", version = "9.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest", version = "8.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "pytest", version = "9.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "alembic", specifier = ">=1.13.2" },
+    { name = "backoff", specifier = ">=2.2.1" },
+    { name = "bcrypt", specifier = ">=4.2.0" },
+    { name = "beautifulsoup4", specifier = ">=4.12.3" },
+    { name = "bs4", specifier = ">=0.0.2" },
+    { name = "email-validator", specifier = ">=2.2.0" },
+    { name = "faker", specifier = ">=27.0.0" },
+    { name = "flask", specifier = ">=3.0.3" },
+    { name = "flask-login", specifier = ">=0.6.3" },
+    { name = "flask-migrate", specifier = ">=4.0.7" },
+    { name = "flask-sqlalchemy", specifier = ">=3.1.1" },
+    { name = "flask-wtf", specifier = ">=1.2.1" },
+    { name = "gunicorn", specifier = ">=21.1.0" },
+    { name = "langchain", specifier = ">=0.2.12" },
+    { name = "langchain-community", specifier = ">=0.2.12" },
+    { name = "langchain-openai", specifier = ">=0.1.22" },
+    { name = "openai", specifier = ">=1.40.0" },
+    { name = "posthog", specifier = ">=3.5.0" },
+    { name = "pymysql", specifier = ">=1.1.1" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.2" },
+    { name = "python-dotenv", specifier = ">=1.0.1" },
+    { name = "requests", specifier = ">=2.31.0" },
+    { name = "slack-bolt", specifier = ">=1.18.1" },
+    { name = "slack-sdk", specifier = ">=3.27.1" },
+    { name = "sqlalchemy", specifier = ">=2.0.32" },
+]
+provides-extras = ["dev"]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3.2" }]
 
 [[package]]
 name = "propcache"
