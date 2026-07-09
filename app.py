@@ -115,8 +115,9 @@ def signup():
             db.session.add(user)
             db.session.commit()
             app.logger.debug(f"New user created: {user.username} with plan: {user.plan}")
-            posthog.capture(form.email.data, 
-                event='user_signed_up', 
+            posthog.capture(
+                'user_signed_up',
+                distinct_id=form.email.data,
                 properties = {
                     'plan': plan,
                     'date_time': formatted_time
@@ -126,8 +127,9 @@ def signup():
             try:
                 months = 1
                 price_dollars = PLAN_PRICES.get(plan, 0)
-                posthog.capture(form.email.data,
-                    event='subscription_purchased',
+                posthog.capture(
+                    'subscription_purchased',
+                    distinct_id=form.email.data,
                     properties={
                         'plan': plan,
                         'months': months,
@@ -177,8 +179,8 @@ def login():
 def logout():
     if current_user.is_authenticated:
         posthog.capture(
-            current_user.email,         # Required - your user's ID
-            event='user_logged_out',    # Required - name of the event       
+            'user_logged_out',                    # Required - name of the event
+            distinct_id=current_user.email,       # Required - your user's ID
             properties={
                 'date_time': formatted_time
             }
@@ -193,7 +195,7 @@ def logout():
 @csrf.exempt  # Disable CSRF for this route for debugging. 
 def search():
     query = request.form.get('query')
-    posthog.capture('search', 'search_performed', {'query': query})
+    posthog.capture('search_performed', distinct_id='search', properties={'query': query})
     return redirect(url_for('search_results', query=query))
 
 @app.route('/search_results')
@@ -388,21 +390,24 @@ def chat_api():
         session['history'].append({"role": "user", "content": user_message})
         session['history'].append({"role": "assistant", "content": ai_text})
 
-        # Capture a basic generation event for visibility even without wrapper
-        try:
-            posthog.capture(
-                distinct_id,
-                event='$ai_generation',
-                properties={
-                    '$ai_model': 'gpt-4o-mini',
-                    '$ai_provider': 'openai',
-                    '$ai_input': user_message,
-                    '$ai_output': ai_text,
-                    '$ai_trace_id': conversation_id,
-                }
-            )
-        except Exception:
-            pass
+        # Capture a basic generation event for visibility even without wrapper.
+        # The LangChain callback and the PostHog-instrumented OpenAI client each
+        # emit $ai_generation themselves, so only capture here when neither is active.
+        if not (langchain_available or openai_instrumented):
+            try:
+                posthog.capture(
+                    '$ai_generation',
+                    distinct_id=distinct_id,
+                    properties={
+                        '$ai_model': 'gpt-4o-mini',
+                        '$ai_provider': 'openai',
+                        '$ai_input': user_message,
+                        '$ai_output': ai_text,
+                        '$ai_trace_id': conversation_id,
+                    }
+                )
+            except Exception:
+                pass
 
         return jsonify({ 'message': ai_text })
     except Exception as e:
