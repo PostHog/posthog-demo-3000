@@ -418,6 +418,39 @@ feature_flag_data = {
             }
         }
 
+# templates/index.html reads this flag and branches on the "control" and
+# "james-test" variants to decide whether to show the co-founder signup modal.
+# Without it the modal never appears and the page logs a failed flag evaluation.
+james_experiment_flag_data = {
+            "name": "Shows the co-founder signup modal on the home page.",
+            "key": "james-experiment",
+            "tags": ["demo"],
+            "filters": {
+                "groups": [
+                    {
+                        "variant": None,
+                        "properties": [],
+                        "rollout_percentage": 100
+                    }
+                ],
+                "payloads": {},
+                "multivariate": {
+                    "variants": [
+                        {
+                            "key": "control",
+                            "name": "No modal shown",
+                            "rollout_percentage": 50
+                        },
+                        {
+                            "key": "james-test",
+                            "name": "Show the co-founder signup modal",
+                            "rollout_percentage": 50
+                        }
+                    ]
+                }
+            }
+        }
+
 def make_posthog_api_request(endpoint, data):
     response = requests.post(url + endpoint, headers=headers, json=data)
     if response.status_code == 201:
@@ -493,5 +526,9 @@ feature_flag_data['filters']['groups'][0]['properties'][0]['value'] = cohorts_id
 existing_ff = get_existing_by(feature_flag_endpoint, 'key', feature_flag_data['key'])
 if not existing_ff:
     response = make_posthog_api_request(feature_flag_endpoint, feature_flag_data)
+
+existing_james_ff = get_existing_by(feature_flag_endpoint, 'key', james_experiment_flag_data['key'])
+if not existing_james_ff:
+    response = make_posthog_api_request(feature_flag_endpoint, james_experiment_flag_data)
 
 

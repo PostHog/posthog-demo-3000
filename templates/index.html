@@ -149,3 +149,40 @@
 </script>
 
 {% endblock %}
+
+{% block scripts %}
+<style>
+    /* Hold the catalogue until the flag resolves so the page doesn't render
+       one row and then visibly snap to the other. */
+    body.ph-flags-pending #family-movies,
+    body.ph-flags-pending #action-movies { visibility: hidden; }
+</style>
+<script>
+    // action_mode_on switches the catalogue from family-friendly titles to
+    // action titles. Both rows already exist in the markup; this only decides
+    // which one is shown. Reading the flag through posthog-js also emits
+    // $feature_flag_called, which the flag usage insights report on.
+    document.body.classList.add('ph-flags-pending');
+
+    function applyActionMode(enabled) {
+        document.getElementById('family-movies').style.display = enabled ? 'none' : '';
+        document.getElementById('action-movies').style.display = enabled ? '' : 'none';
+        document.body.classList.remove('ph-flags-pending');
+    }
+
+    if (window.posthog && posthog.onFeatureFlags) {
+        posthog.onFeatureFlags(function () {
+            applyActionMode(posthog.isFeatureEnabled('action_mode_on') === true);
+        });
+        // If flags are slow, blocked, or unavailable, fall back to the default
+        // family view rather than leaving the catalogue hidden.
+        setTimeout(function () {
+            if (document.body.classList.contains('ph-flags-pending')) {
+                applyActionMode(false);
+            }
+        }, 2000);
+    } else {
+        applyActionMode(false);
+    }
+</script>
+{% endblock %}
