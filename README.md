@@ -55,19 +55,25 @@ make run
 
 ### Option 2 - Run as a Container with Docker
 
-The container hasn't been pushed to a registry yet, so you'll need to build and run it yourself. Make sure you have [Docker Desktop for Mac](https://docs.docker.com/desktop/install/mac-install/) installed.
-
-In the root of the repository, first build the container:
+Build and run the container locally (Docker Desktop recommended).
 
 ```bash
+# Build image
 docker build --no-cache --tag posthog-hogflix-demo .
+
+# Run container (map host port -> container 5000). If host 5000 is reserved
+# (AirPlay on macOS), use 5001 or 5002 instead: "-p 5001:5000"
+docker run -d --name hogflix-demo -p 5001:5000 \
+   -e PH_PROJECT_KEY='<Project API key>' \
+   -e PH_HOST='https://<eu or us>.i.posthog.com' \
+   posthog-hogflix-demo
+
+# Initialize the SQLite DB and seed demo data (idempotent)
+docker exec -i hogflix-demo python pop_db.py
 ```
 
-Then run the container in detached mode (background):
-
-```bash
-docker run -d -p 5000:5000 -e PH_PROJECT_KEY=<Project API key> -e PH_HOST='https://<eu or us>.i.posthog.com' posthog-hogflix-demo
-```
+Note: macOS commonly reserves port `5000` for AirPlay — if you see a port bind
+error, pick a different host port (5001, 5002, etc.).
 
 You can then access the app on `localhost:5000`.
 
