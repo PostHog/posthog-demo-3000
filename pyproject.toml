@@ -31,13 +31,11 @@ dependencies = [
     "sqlalchemy>=2.0.32",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest>=8.3.2",
 ]
 
 [tool.uv]
-exclude-newer = "7 days"
-dev-dependencies = [
-    "pytest>=8.3.2",
-]
+# Fixed cutoff keeps uv.lock reproducible. Move the date forward to pick up newer releases.
+exclude-newer = "2026-05-21T00:00:00Z"

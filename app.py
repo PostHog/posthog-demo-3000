@@ -199,7 +199,6 @@ def logout():
 
 
 @app.route('/search', methods=['POST'])
-@csrf.exempt  # Disable CSRF for this route for debugging. 
 def search():
     query = request.form.get('query')
     distinct_id = current_user.email if current_user.is_authenticated else request.remote_addr or 'anonymous'

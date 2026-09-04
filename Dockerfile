@@ -1,17 +1,14 @@
-FROM python:3.12.5-slim-bookworm
+FROM python:3.12-slim-bookworm
+COPY --from=ghcr.io/astral-sh/uv:0.11.15 /uv /uvx /bin/
 
-# Set the working directory
 WORKDIR /app
 
-# Copy requirements and install dependencies
-COPY requirements.txt requirements.txt
-RUN pip3 install --no-cache-dir -r requirements.txt
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
 
-# Copy application files
 COPY . .
 
-# Expose the port Flask listens on
 EXPOSE 8080
 
-# Command to run the app with Gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
+# Initialize the SQLite DB on first start, then serve with Gunicorn
+CMD ["sh", "-c", "uv run --no-sync python pop_db.py && uv run --no-sync python dummy_data.py && exec uv run --no-sync gunicorn -b 0.0.0.0:8080 app:app"]

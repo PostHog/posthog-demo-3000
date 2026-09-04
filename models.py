@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import bcrypt
 from flask_login import UserMixin
-import datetime
+from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
@@ -59,7 +59,7 @@ class MovieStats(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     time_frame = db.Column(db.String(50), nullable=False)
     count = db.Column(db.Integer, nullable=False)
-    date = db.Column(db.Date, nullable=False, default=datetime.datetime.utcnow)
+    date = db.Column(db.Date, nullable=False, default=lambda: datetime.now(timezone.utc).date())
     genre = db.Column(db.String(50), nullable=False)
 
     user = db.relationship('User', backref=db.backref('movie_stats', lazy=True))
@@ -79,7 +79,7 @@ class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     def __repr__(self):
         return f'<BlogPost {self.title}>'
