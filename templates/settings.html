@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Settings</h1>
+    <div class="card mb-4">
+        <div class="card-header">
+            Account
+        </div>
+        <div class="card-body">
+            <p class="card-text">Username: {{ user.username }}</p>
+            <p class="card-text">Email: {{ user.email }}</p>
+            <p class="card-text">Plan: {{ user.plan }}</p>
+            <p class="card-text">Kid-friendly mode: {{ 'Off' if user.is_adult else 'On' }}</p>
+            <a href="{{ url_for('profile') }}" class="btn btn-primary btn-red">Back to profile</a>
+            <a href="{{ url_for('feature_flags') }}" class="btn btn-outline-primary">Feature flags</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
