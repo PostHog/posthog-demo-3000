@@ -37,5 +37,4 @@ dev = [
 ]
 
 [tool.uv]
-# Fixed cutoff keeps uv.lock reproducible. Move the date forward to pick up newer releases.
-exclude-newer = "2026-05-21T00:00:00Z"
+exclude-newer = "7 days"
