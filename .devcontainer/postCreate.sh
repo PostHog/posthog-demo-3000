@@ -18,8 +18,13 @@ else
   fi
 fi
 
-python -m pip install -U pip || true
-pip install -r requirements.txt || true
+# The Makefile and CI both drive Python through uv, so the container must provide it.
+if ! command -v uv >/dev/null 2>&1; then
+  python -m pip install -U uv
+fi
+
+# uv.lock is the source of truth. uv replaces the stale .venv that the repo still tracks.
+uv sync
 
 echo "postCreate complete. Update .env with your PostHog values, then run: make run"
 
