@@ -36,7 +36,7 @@ run: check-env db seed artifacts
 	uv run python app.py
 
 seed:
-	uv run python scripts/seed_demo_data.py -d $${DAYS:-30} -i $${ITER:-100}
+	uv run python scripts/seed_demo_data.py -d $${DAYS:-120} -i $${ITER:-300}
 
 artifacts:
 	uv run python scripts/create_posthog_artifacts.py

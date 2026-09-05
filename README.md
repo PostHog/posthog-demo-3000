@@ -2,6 +2,23 @@
 
 This repository allows you to spin up a demo app which has been instrumented with PostHog, and seed PostHog historic data and artifacts to provide a full-featured demo environment showcasing all features.
 
+## Required: Personal API key
+
+This repo creates real PostHog artifacts (cohorts, actions, dashboards, surveys, flags, experiments, insights) via the API. You need a Personal API key with these 8 scopes:
+
+- action:write
+- cohort:write
+- dashboard:write
+- experiment:write
+- feature_flag:write
+- insight:write
+- query:read
+- survey:write
+
+Create one at https://us.posthog.com/settings/user-api-keys (Settings → Personal API keys → Create), tick the 7 Write checkboxes plus Read on Query, copy the key, and add it to your .env as PH_PERSONAL_API_KEY=phs_...
+
+If you skip this step, `make artifacts` will fail with a clear message naming the missing scopes.
+
 ## Prerequisites
 
 If you choose to run the demo entirely in your browser using GitHub Code Spaces, skip the requirements and go straight to Option 3, otherwise follow the prerequisites instructions. 
