@@ -4,53 +4,61 @@ This repository allows you to spin up a demo app which has been instrumented wit
 
 ## Prerequisites
 
-If you choose to run the demo entirely in your browser using GitHub Code Spaces, skip the requirements and go straight to Option 3, otherwise follow the prerequisites instructions. 
+If you choose to run the demo entirely in your browser using GitHub Code Spaces, skip the requirements and go straight to Option 3.
 
-To run the demo app on a Mac you'll need to set up Python 3 locally:
+To run the demo locally, you need:
 
-1. Install Xcode Command Line Tools if you haven't already: `xcode-select --install`.
-2. Install the package manager Homebrew by following the [instructions here](https://brew.sh/).
+1. **Python 3.9+** — check with `python3 --version`. macOS often includes Python 3 already; if not, install it with [Homebrew](https://brew.sh/) (`brew install python`) or your preferred package manager.
+2. **[uv](https://docs.astral.sh/uv/)** — check with `uv --version`. If missing, install with Homebrew (`brew install uv`) or follow the [uv install guide](https://docs.astral.sh/uv/getting-started/installation/).
+3. **PostHog credentials** — you'll add these to a `.env` file before running the app (see Option 1).
 
-After installation, make sure to follow the instructions printed in your terminal to add Homebrew to your `$PATH`. Otherwise, the command line will not know about packages installed with Homebrew.
+From the root of this repository, install dependencies:
 
-3. Install Python: `brew install python`.
-4. Upgrade pip to the latest version: `pip install -U pip`
-5. From the root of this repository, install the requirements: `pip install -r requirements.txt`
+```bash
+make install
+```
+
+This uses `uv` to create a project virtual environment and install packages from `pyproject.toml`.
 
 ## Running the app
 
-There are three ways to run the app: locally using Python, via Docker, or using GitHub Codespaces. 
+There are three ways to run the app: locally using Python, via Docker, or using GitHub Codespaces.
 
 ### Option 1 - Run Locally with Python
 
-Before running the app for the first time, you'll need to create and seed the local SQLite database:
+**Quick start:**
 
 ```bash
-python pop_db.py
-python dummy_data.py
+make env          # creates .env from .env.example if needed
+make install      # install dependencies (first time only)
+make run          # verify .env, init DB, seed PostHog, create artifacts, start app
 ```
 
-This only needs to be done the first time you run the app.
+Before running `make run`, open `.env` and replace the placeholder values for at least:
 
-Next, set your PostHog Host and Project API key as environment variables. You can either rename `.env.example` to `.env` and update the placeholder variables therein (recommended), or run the following:
+- `PH_HOST`
+- `PH_PROJECT_KEY`
+- `PH_PERSONAL_API_KEY`
+- `PH_PROJECT_ID`
+
+If you open a browser and head to `http://127.0.0.1:5000/`, you'll see the HogFlix app running. Use `Ctrl + C` in your terminal to stop the app.
+
+**Manual steps (optional):** If you prefer to run commands individually instead of `make run`:
+
+```bash
+make env
+make install
+make db           # initialize and seed the local SQLite database
+make seed         # seed historical events to PostHog
+make artifacts    # create demo artifacts in PostHog
+uv run python app.py
+```
+
+You can also export PostHog variables in your shell instead of using `.env`:
 
 ```bash
 export PH_HOST='https://<eu or us>.i.posthog.com'
 export PH_PROJECT_KEY='<Project API key>'
-```
-
-Finally, run the app:
-
-```bash
-python app.py
-```
-
-If you open up a browser and head to `http://127.0.0.1:5000/`, you'll see the HogFlix app running. Use `Ctrl + C` in your terminal to stop the app.
-
-Alternatively, after updating `.env`, you can use the Makefile to bootstrap everything in one step:
-
-```bash
-make run
 ```
 
 ### Option 2 - Run as a Container with Docker
@@ -157,8 +165,10 @@ Optional flags (overrides env when provided):
 The `500_names_and_emails.csv` file in the `scripts/` folder contains dummy data for 500 users, which includes group (Family) information. If needed, you can recreate this file by running:
 
 ```bash
-python scripts/generate_fake_names_and_emails.py
+uv run python scripts/generate_fake_names_and_emails.py
 ```
+
+Then copy the generated file back to the `scripts/` folder to generate more demo data.
 
 ## Makefile Shortcuts
 
@@ -172,8 +182,6 @@ Common tasks are wrapped in a `Makefile`:
 - `make seed`: Seed historical events to PostHog (reads `PH_*` from `.env`; flags optional)
 - `make artifacts`: Create PostHog demo artifacts (reads `PH_*` from `.env`; idempotent)
 - `make test`: Run tests
-
-Then copy the generated file back to the `scripts/` folder to generate more demo data.
 
 ---
 
