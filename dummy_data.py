@@ -2,7 +2,7 @@
 
 from app import app, db
 from models import User, MovieStats
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import random
 
 def generate_dummy_data(user, start_date, end_date, time_frame, count_range, genre):
@@ -22,7 +22,7 @@ with app.app_context():
     user = User.query.first()
 
     # Generate data for weeks, months, and years
-    today = datetime.utcnow().date()
+    today = datetime.now(timezone.utc).date()
     generate_dummy_data(user, today - timedelta(weeks=12), today, 'week', (1, 10), 'Action')  # Last 12 weeks for action movies
     generate_dummy_data(user, today - timedelta(weeks=12), today, 'week', (1, 10), 'Romantic Comedy')  # Last 12 weeks for romantic comedies
     generate_dummy_data(user, today - timedelta(days=365*5), today, 'month', (20, 100), 'Action')  # Last 5 years for action movies

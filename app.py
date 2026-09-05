@@ -58,7 +58,7 @@ if chat_enabled:
 
 @login.user_loader
 def load_user(id):
-    return User.query.get(int(id))
+    return db.session.get(User, int(id))
 
 @app.route('/')
 def index():
@@ -83,9 +83,9 @@ def movie(movie_id):
     movie = Movie.query.get_or_404(movie_id)
     return render_template('movie.html', movie=movie)
 
-current_time = datetime.now()
-formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-# Output example: "2024-01-15 14:30:45"
+def formatted_now():
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
 
 PLAN_PRICES = {
     "Premium": 9.99,
@@ -115,19 +115,21 @@ def signup():
             db.session.add(user)
             db.session.commit()
             app.logger.debug(f"New user created: {user.username} with plan: {user.plan}")
-            posthog.capture(form.email.data, 
-                event='user_signed_up', 
-                properties = {
+            posthog.capture(
+                'user_signed_up',
+                distinct_id=form.email.data,
+                properties={
                     'plan': plan,
-                    'date_time': formatted_time
+                    'date_time': formatted_now()
                 }
             )
             # Subscription purchase event for Revenue Analytics
             try:
                 months = 1
                 price_dollars = PLAN_PRICES.get(plan, 0)
-                posthog.capture(form.email.data,
-                    event='subscription_purchased',
+                posthog.capture(
+                    'subscription_purchased',
+                    distinct_id=form.email.data,
                     properties={
                         'plan': plan,
                         'months': months,
@@ -136,7 +138,7 @@ def signup():
                     }
                 )
             except Exception:
-                pass
+                app.logger.exception('Failed to capture subscription_purchased')
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('login'))
         else:
@@ -163,9 +165,16 @@ def login():
             return redirect(url_for('login'))
         
         login_user(user, remember=True)
-    
+        posthog.capture(
+            'user_logged_in',
+            distinct_id=user.email,
+            properties={
+                'plan': user.plan,
+                'date_time': formatted_now()
+            }
+        )
 
-        flash('Welcome back!', 'success') 
+        flash('Welcome back!', 'success')
         
         next_page = request.args.get('next')
         return redirect(next_page or url_for('index'))
@@ -177,10 +186,10 @@ def login():
 def logout():
     if current_user.is_authenticated:
         posthog.capture(
-            current_user.email,         # Required - your user's ID
-            event='user_logged_out',    # Required - name of the event       
+            'user_logged_out',
+            distinct_id=current_user.email,
             properties={
-                'date_time': formatted_time
+                'date_time': formatted_now()
             }
         )
 
@@ -190,10 +199,10 @@ def logout():
 
 
 @app.route('/search', methods=['POST'])
-@csrf.exempt  # Disable CSRF for this route for debugging. 
 def search():
     query = request.form.get('query')
-    posthog.capture('search', 'search_performed', {'query': query})
+    distinct_id = current_user.email if current_user.is_authenticated else request.remote_addr or 'anonymous'
+    posthog.capture('search_performed', distinct_id=distinct_id, properties={'query': query})
     return redirect(url_for('search_results', query=query))
 
 @app.route('/search_results')
@@ -391,8 +400,8 @@ def chat_api():
         # Capture a basic generation event for visibility even without wrapper
         try:
             posthog.capture(
-                distinct_id,
-                event='$ai_generation',
+                '$ai_generation',
+                distinct_id=distinct_id,
                 properties={
                     '$ai_model': 'gpt-4o-mini',
                     '$ai_provider': 'openai',
@@ -402,7 +411,7 @@ def chat_api():
                 }
             )
         except Exception:
-            pass
+            app.logger.exception('Failed to capture $ai_generation')
 
         return jsonify({ 'message': ai_text })
     except Exception as e:

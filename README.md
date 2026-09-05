@@ -6,16 +6,10 @@ This repository allows you to spin up a demo app which has been instrumented wit
 
 If you choose to run the demo entirely in your browser using GitHub Code Spaces, skip the requirements and go straight to Option 3, otherwise follow the prerequisites instructions. 
 
-To run the demo app on a Mac you'll need to set up Python 3 locally:
+To run the demo app locally you need Python 3.10+ and [uv](https://docs.astral.sh/uv/):
 
-1. Install Xcode Command Line Tools if you haven't already: `xcode-select --install`.
-2. Install the package manager Homebrew by following the [instructions here](https://brew.sh/).
-
-After installation, make sure to follow the instructions printed in your terminal to add Homebrew to your `$PATH`. Otherwise, the command line will not know about packages installed with Homebrew.
-
-3. Install Python: `brew install python`.
-4. Upgrade pip to the latest version: `pip install -U pip`
-5. From the root of this repository, install the requirements: `pip install -r requirements.txt`
+1. Install uv: `curl -LsSf https://astral.sh/uv/install.sh | sh` (or `brew install uv` on macOS).
+2. From the root of this repository, install the dependencies: `make install` (runs `uv sync`).
 
 ## Running the app
 
@@ -26,8 +20,7 @@ There are three ways to run the app: locally using Python, via Docker, or using 
 Before running the app for the first time, you'll need to create and seed the local SQLite database:
 
 ```bash
-python pop_db.py
-python dummy_data.py
+make db
 ```
 
 This only needs to be done the first time you run the app.
@@ -42,7 +35,7 @@ export PH_PROJECT_KEY='<Project API key>'
 Finally, run the app:
 
 ```bash
-python app.py
+uv run python app.py
 ```
 
 If you open up a browser and head to `http://127.0.0.1:5000/`, you'll see the HogFlix app running. Use `Ctrl + C` in your terminal to stop the app.
@@ -66,10 +59,10 @@ docker build --no-cache --tag posthog-hogflix-demo .
 Then run the container in detached mode (background):
 
 ```bash
-docker run -d -p 5000:5000 -e PH_PROJECT_KEY=<Project API key> -e PH_HOST='https://<eu or us>.i.posthog.com' posthog-hogflix-demo
+docker run -d -p 5000:8080 -e PH_PROJECT_KEY=<Project API key> -e PH_HOST='https://<eu or us>.i.posthog.com' posthog-hogflix-demo
 ```
 
-You can then access the app on `localhost:5000`.
+The container listens on port 8080 and initializes its SQLite database on first start. You can then access the app on `localhost:5000`. If macOS reserves port 5000 for AirPlay, map another host port, for example `-p 5001:8080`.
 
 ### Optional: Enable the built-in Chat (LLM) demo
 
@@ -157,7 +150,7 @@ Optional flags (overrides env when provided):
 The `500_names_and_emails.csv` file in the `scripts/` folder contains dummy data for 500 users, which includes group (Family) information. If needed, you can recreate this file by running:
 
 ```bash
-python scripts/generate_fake_names_and_emails.py
+uv run python scripts/generate_fake_names_and_emails.py
 ```
 
 ## Makefile Shortcuts
