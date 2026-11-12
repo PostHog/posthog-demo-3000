@@ -18,6 +18,8 @@ else
   fi
 fi
 
+export PATH="$HOME/.local/bin:$PATH"
+
 # The Makefile and CI both drive Python through uv, so the container must provide it.
 if ! command -v uv >/dev/null 2>&1; then
   python -m pip install -U uv
